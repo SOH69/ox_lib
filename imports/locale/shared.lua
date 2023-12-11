@@ -38,7 +38,7 @@ function lib.getLocales()
 end
 
 ---Loads the ox_lib locale module. Prefer using fxmanifest instead (see [docs](https://overextended.dev/ox_lib#usage)).
-function lib.locale()
+function lib.locale(getFlatten)
     local lang = GetConvar('ox:locale', 'en')
     local locales = json.decode(LoadResourceFile(cache.resource, ('locales/%s.json'):format(lang)))
 
@@ -58,7 +58,11 @@ function lib.locale()
     end
 
     local flattenedDict = {}
-    flattenDict(nil, locales, flattenedDict)
+    if getFlatten then
+        flattenDict(nil, locales, flattenedDict)
+    else
+        flattenedDict = locales
+    end
 
     for k, v in pairs(flattenedDict) do
         if type(v) == 'string' then
